@@ -1,1 +1,6 @@
 # PrisonPhone
+
+Running:
+```
+rake
+```
