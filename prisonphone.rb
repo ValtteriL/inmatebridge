@@ -60,6 +60,10 @@ class UI
 end
 
 
+# This class is responsible for connecting to Asterisk
+class AsteriskClient
+end
+
 
 class String
   def is_number?
