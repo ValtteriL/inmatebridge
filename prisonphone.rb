@@ -1,4 +1,5 @@
 require 'io/console'
+require './lib/asterisk_client'
 
 
 class UI
@@ -60,16 +61,14 @@ class UI
 end
 
 
-# This class is responsible for connecting to Asterisk
-class AsteriskClient
-end
-
-
 class String
   def is_number?
     true if Float(self) rescue false
   end
 end
+
+client = AsteriskClient.new
+client.run
 
 ui = UI.new
 #ui.nobody_connected_ui
