@@ -1,7 +1,6 @@
 require 'asterisk/ari/client'
 
 class AsteriskClient
-
   def initialize
     @client = Ari::Client.new(
       url: 'http://127.0.0.1:8088/ari',
@@ -10,11 +9,14 @@ class AsteriskClient
     )
   end
 
-  def run
+  def asdasdas
+    puts 'kek'
+  end
 
+  def run
     # listen to events
     @client.on :websocket_open do
-      puts "Connected !"
+      puts 'Connected !'
     end
 
     @client.on :stasis_start do |e|
@@ -29,7 +31,6 @@ class AsteriskClient
       e.channel.on :stasis_end do |e|
         puts "Channel #{e.channel.name} left Stasis."
       end
-
     end
 
     # start websocket to receive events
@@ -37,14 +38,13 @@ class AsteriskClient
     sleep
   end
 
-  def call(number)
-    raise "Not implemented"
+  def call(_number)
+    raise 'Not implemented'
     # originate
-    #@client.channels.originate endpoint: 'PJSIP/endpoint-name', extension: 11
+    # @client.channels.originate endpoint: 'PJSIP/endpoint-name', extension: 11
   end
 
   def get_channels
     @client.channels.list
   end
-
 end
