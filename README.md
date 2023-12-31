@@ -2,10 +2,15 @@
 
 Running:
 ```
-rake
+bundle exec rake
 ```
 
 Start development server:
 ```
-rake server
+bundle exec rake server
+```
+
+Help:
+```
+bundle exec rake -T
 ```
