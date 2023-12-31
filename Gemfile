@@ -2,8 +2,10 @@
 
 source 'https://rubygems.org'
 gem 'asterisk-ari-client'
+gem 'pry'
+gem 'rake'
 
 group :development, :test do
-  gem 'solargraph', require: false
   gem 'rubocop', require: false
+  gem 'solargraph', require: false
 end
