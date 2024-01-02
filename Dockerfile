@@ -12,5 +12,8 @@ RUN apt-get update && apt-get install -y \
 # add asterisk config
 COPY config/ /etc/asterisk/
 
+# add sounds
+COPY sounds/ /var/lib/asterisk/sounds/
+
 # entrypoint
 CMD [ "asterisk", "-f" ]

@@ -6,7 +6,6 @@ require './lib/ui'
 require './lib/string'
 
 client = AsteriskClient.new
-client.register_listener
 
 ui = UI.new client
 ui.run

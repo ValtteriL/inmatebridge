@@ -22,7 +22,7 @@ class UI
 
   def run
     puts 'Available messages:'
-    voicemessages = Dir.entries('voicemessages').select { |f| !File.directory? f }
+    voicemessages = Dir.entries('sounds').select { |f| !File.directory? f }
     voicemessages.each_with_index do |message, index|
       puts "#{index}: #{message}"
     end
@@ -35,10 +35,14 @@ class UI
       input = fast_input
 
       if input.number?
-        puts "Playing message #{voicemessages[input.to_i]}"
+        # puts "Playing message #{voicemessages[input.to_i]}"
+        begin
+          @client.toggle_sound voicemessages[input.to_i].split('.')[0]
+        rescue NoMethodError
+          nil
+        end
       elsif input == 'm'
-        puts 'Playing music'
-        @client.start_moh
+        @client.toggle_moh
       elsif input == 'q'
         puts 'Disconnecting call'
         break
@@ -46,6 +50,13 @@ class UI
         puts "Invalid input \"#{input}\""
       end
 
+    end
+  end
+
+  # class methods
+  class << self
+    def print_status(message)
+      puts "[*] #{message}"
     end
   end
 
@@ -61,10 +72,6 @@ class UI
     puts 'Press q to disconnect call'
 
     puts '#############################################'
-  end
-
-  def print_status(message)
-    puts "[*] #{message}"
   end
 
   def fast_input
