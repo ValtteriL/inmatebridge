@@ -9,5 +9,5 @@ end
 
 desc 'Run Asterisk in Docker'
 task :server do
-  sh 'docker run --rm -it -p 127.0.0.1:8088:8088/tcp -p 127.0.0.1:5060:5060/udp $(docker build -q .)'
+  sh 'docker run --rm -it -p 127.0.0.1:8088:8088/tcp -p 127.0.0.1:4569:4569/udp $(docker build -q .)'
 end
