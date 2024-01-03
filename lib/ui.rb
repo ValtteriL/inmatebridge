@@ -27,6 +27,7 @@ class UI
       puts "#{index}: #{message}"
     end
 
+    puts 'Press m to toggle music on hold'
     puts 'Press q to disconnect call'
 
     puts '#############################################'

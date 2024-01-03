@@ -5,6 +5,8 @@ require 'pry'
 
 # Asterisk client responsible for connecting to Asterisk and handling events
 class AsteriskClient
+  attr_reader :client, :bridge
+
   def initialize
     @@client = Ari::Client.new(
       url: 'http://127.0.0.1:8088/ari',
@@ -47,34 +49,47 @@ class AsteriskClient
   end
 
   def toggle_sound(filename)
-    playback = begin
-      @@client.playbacks.get(playbackId: filename)
-    rescue StandardError
-      nil
-    end
+    # stop playbacks
+    # if requested one was not playing, start it
 
-    if playback.nil?
+    playback = AsteriskClient.currently_playing_playback
+    AsteriskClient.stop_sound_in_bridge
+
+    if playback.nil? || playback.media_uri != "sound:#{filename}"
       UI.print_status "Playing #{filename}"
-      @@bridge.play_with_id(playbackId: filename, media: "sound:#{filename}")
+      AsteriskClient.play_sound_in_bridge filename
     else
       UI.print_status "Stopping #{filename}"
-      @@client.playbacks.stop(playbackId: filename)
     end
   end
 
   # class methods
   class << self
+    PLAYBACK_ID = 'prisonphone'
+
+    def currently_playing_playback
+      @@client.playbacks.get(playbackId: PLAYBACK_ID)
+    rescue StandardError
+      nil
+    end
+
+    def stop_sound_in_bridge
+      class_variable_get(:@@client).playbacks.stop(playbackId: PLAYBACK_ID)
+    rescue StandardError
+      nil
+    end
+
     def play_sound_in_bridge(filename)
-      AsteriskClient.class_variable_get(:@@bridge).play(media: "sound:#{filename}")
+      class_variable_get(:@@bridge).play_with_id(playbackId: PLAYBACK_ID, media: "sound:#{filename}")
     end
 
     def handle_call(e)
       e.channel.answer
 
-      bridge = AsteriskClient.class_variable_get(:@@bridge)
+      bridge = class_variable_get(:@@bridge)
       bridge.add_channel(channel: e.channel.id)
       UI.print_status "Inmate #{e.channel.name} joined bridge"
-      AsteriskClient.play_sound_in_bridge('confbridge-join')
+      play_sound_in_bridge('confbridge-join')
 
       register_channel_listener(e)
     end
@@ -86,7 +101,7 @@ class AsteriskClient
 
       e.channel.on :stasis_end do |e|
         UI.print_status "Inmate #{e.channel.name} disconnected"
-        AsteriskClient.play_sound_in_bridge('confbridge-leave')
+        play_sound_in_bridge('confbridge-leave')
       end
     end
   end
