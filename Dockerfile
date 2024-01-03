@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 COPY config/ /etc/asterisk/
 
 # add sounds
-COPY sounds/ /var/lib/asterisk/sounds/
+COPY sounds/ /usr/share/asterisk/sounds/
 
 # entrypoint
 CMD [ "asterisk", "-f" ]
