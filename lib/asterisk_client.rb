@@ -66,6 +66,26 @@ class AsteriskClient
   # class methods
   class << self
     PLAYBACK_ID = 'prisonphone'
+    VICTIM_ID = 'victim'
+
+    def call(number)
+      UI.print_status "Calling #{number}"
+      begin
+        @@client.channels.originate_with_id(endpoint: "PJSIP/mytrunk/#{number}", app: 'prisonphone',
+                                            channelId: VICTIM_ID)
+      rescue StandardError => e
+        UI.print_status "Error calling #{number}: #{e}"
+      end
+    end
+
+    def hangup
+      UI.print_status 'Hanging up victim'
+      begin
+        @@client.channels.hangup(channelId: VICTIM_ID)
+      rescue StandardError
+        nil
+      end
+    end
 
     def currently_playing_playback
       @@client.playbacks.get(playbackId: PLAYBACK_ID)
@@ -84,24 +104,28 @@ class AsteriskClient
     end
 
     def handle_call(e)
+      AsteriskClient.play_sound_in_bridge('confbridge-join')
+
+      # dont let victim hear sound
+      sleep 1 if e.channel.name.include? 'IAX2'
+
       e.channel.answer
 
       bridge = class_variable_get(:@@bridge)
       bridge.add_channel(channel: e.channel.id)
-      UI.print_status "Inmate #{e.channel.name} joined bridge"
-      play_sound_in_bridge('confbridge-join')
+      UI.print_status "#{e.channel.name} joined bridge"
 
       register_channel_listener(e)
     end
 
     def register_channel_listener(e)
       e.channel.on :channel_dtmf_received do |e|
-        UI.print_status "Inmate #{e.channel.name} pressed: #{e.digit}"
+        UI.print_status "#{e.channel.name} pressed: #{e.digit}"
       end
 
       e.channel.on :stasis_end do |e|
-        UI.print_status "Inmate #{e.channel.name} disconnected"
-        play_sound_in_bridge('confbridge-leave')
+        UI.print_status "#{e.channel.name} disconnected"
+        AsteriskClient.play_sound_in_bridge('confbridge-leave')
       end
     end
   end

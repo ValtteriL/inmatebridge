@@ -2,22 +2,10 @@
 
 # User interface for the prison phone
 class UI
+  attr_reader :client
+
   def initialize(asterisk_client)
     @client = asterisk_client
-  end
-
-  def nobody_connected_ui
-    print_status 'Waiting for your call'
-    puts 'Call XXX using SIP client'
-  end
-
-  def disconnect_call_ui
-    print_status 'No call connected'
-
-    puts 'Enter phone number to call'
-    number = gets.chomp
-
-    puts "Calling #{number}"
   end
 
   def run
@@ -28,7 +16,9 @@ class UI
     end
 
     puts 'Press m to toggle music on hold'
-    puts 'Press q to disconnect call'
+    puts 'Press c to call a victim'
+    puts 'Press h to hangup victim'
+    puts 'Press q to quit'
 
     puts '#############################################'
 
@@ -44,9 +34,16 @@ class UI
         end
       elsif input == 'm'
         @client.toggle_moh
+      elsif input == 'c'
+        call_ui
+      elsif input == 'h'
+        puts 'Hanging up victim'
+        AsteriskClient.hangup
       elsif input == 'q'
-        puts 'Disconnecting call'
+        puts 'Quitting'
         break
+      elsif input == "\r"
+        puts
       else
         puts "Invalid input \"#{input}\""
       end
@@ -78,5 +75,16 @@ class UI
   def fast_input
     print 'prisonphone> '
     STDIN.getch
+  end
+
+  def nobody_connected_ui
+    print_status 'Waiting for your call'
+    puts 'Call XXX using SIP client'
+  end
+
+  def call_ui
+    puts 'Enter phone number to call'
+    number = gets.chomp
+    AsteriskClient.call number
   end
 end
