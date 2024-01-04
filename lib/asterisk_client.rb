@@ -5,14 +5,15 @@ require 'pry'
 
 # Asterisk client responsible for connecting to Asterisk and handling events
 class AsteriskClient
-  attr_reader :client, :bridge
+  attr_reader :bridge
 
   def initialize
-    @@client = Ari::Client.new(
+    Ari.client = Ari::Client.new(
       url: 'http://127.0.0.1:8088/ari',
       api_key: 'asterisk:asterisk',
       app: 'prisonphone'
     )
+
     @@bridge = create_bridge_if_not_exists
     @moh_playing = false
 
@@ -20,20 +21,20 @@ class AsteriskClient
   end
 
   def register_listener
-    @@client.on :websocket_open do
+    Ari.client.on :websocket_open do
       UI.print_status 'InmateBridge ready'
     end
 
-    @@client.on :stasis_start do |e|
+    Ari.client.on :stasis_start do |e|
       AsteriskClient.handle_call(e)
     end
 
-    @@client.connect_websocket
+    Ari.client.connect_websocket
   end
 
   def create_bridge_if_not_exists
-    bridge = @@client.bridges.list.select { |b| b.id == 'prisonphone' }.first
-    bridge = @@client.bridges.create(type: 'mixing', bridgeId: 'prisonphone') if @bridge.nil?
+    bridge = Ari.client.bridges.list.select { |b| b.id == 'prisonphone' }.first
+    bridge = Ari.client.bridges.create(type: 'mixing', bridgeId: 'prisonphone') if @bridge.nil?
     bridge
   end
 
@@ -71,8 +72,8 @@ class AsteriskClient
     def call(number)
       UI.print_status "Calling #{number}"
       begin
-        @@client.channels.originate_with_id(endpoint: "PJSIP/mytrunk/#{number}", app: 'prisonphone',
-                                            channelId: VICTIM_ID)
+        Ari.client.channels.originate_with_id(endpoint: "PJSIP/mytrunk/#{number}", app: 'prisonphone',
+                                              channelId: VICTIM_ID)
       rescue StandardError => e
         UI.print_status "Error calling #{number}: #{e}"
       end
@@ -81,20 +82,20 @@ class AsteriskClient
     def hangup
       UI.print_status 'Hanging up victim'
       begin
-        @@client.channels.hangup(channelId: VICTIM_ID)
+        Ari.client.channels.hangup(channelId: VICTIM_ID)
       rescue StandardError
         nil
       end
     end
 
     def currently_playing_playback
-      @@client.playbacks.get(playbackId: PLAYBACK_ID)
+      Ari.client.playbacks.get(playbackId: PLAYBACK_ID)
     rescue StandardError
       nil
     end
 
     def stop_sound_in_bridge
-      class_variable_get(:@@client).playbacks.stop(playbackId: PLAYBACK_ID)
+      Ari.client.playbacks.stop(playbackId: PLAYBACK_ID)
     rescue StandardError
       nil
     end
@@ -104,12 +105,11 @@ class AsteriskClient
     end
 
     def handle_call(e)
+      e.channel.answer
       AsteriskClient.play_sound_in_bridge('confbridge-join')
 
       # dont let victim hear sound
-      sleep 1 if e.channel.name.include? 'IAX2'
-
-      e.channel.answer
+      sleep 1 if e.channel.name.include? 'SIP'
 
       bridge = class_variable_get(:@@bridge)
       bridge.add_channel(channel: e.channel.id)
