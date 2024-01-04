@@ -5,8 +5,6 @@ require 'pry'
 
 # Asterisk client responsible for connecting to Asterisk and handling events
 class AsteriskClient
-  attr_reader :bridge
-
   def initialize
     Ari.client = Ari::Client.new(
       url: 'http://127.0.0.1:8088/ari',
@@ -62,6 +60,10 @@ class AsteriskClient
     else
       UI.print_status "Stopping #{filename}"
     end
+  end
+
+  def list_channels
+    Ari.client.channels.list
   end
 
   # class methods

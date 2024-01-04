@@ -13,7 +13,8 @@ class UI
       'h' => method(:print_menu),
       'c' => method(:call_ui),
       'x' => AsteriskClient.method(:hangup),
-      "\r" => method(:puts)
+      "\r" => method(:puts),
+      'l' => method(:list_bridge_participants)
     }
     @voicemessages = Dir.entries('sounds').reject { |f| File.directory? f }
   end
@@ -45,7 +46,7 @@ class UI
         puts 'Quitting'
         break
       else
-        puts "Invalid input \"#{input}\""
+        puts "Invalid input \"#{input}\". Press \"h\" for help."
       end
     end
   end
@@ -69,13 +70,14 @@ class UI
     puts '#############################################'
     puts 'Controls:'
     puts 'h to show this menu'
+    puts 'l to list bridge participants'
     puts 'm to toggle music on hold'
     puts 'c to call a victim'
     puts 'x to hangup victim'
     puts 'q to quit'
     puts
 
-    puts 'Play sounds:'
+    puts 'Toggle sounds:'
     voicemessages.each_with_index do |message, index|
       puts "#{index}: #{message}"
     end
@@ -86,6 +88,20 @@ class UI
   def prompt(*args)
     print(*args)
     gets.chomp
+  end
+
+  def list_bridge_participants
+    channels = client.list_channels
+    if channels.any?
+      puts
+      puts 'Participants on bridge:'
+      client.list_channels.map do |c|
+        puts "- #{c.name} (victim)" if c.name.include? 'PJSIP'
+        puts "- #{c.name}" unless c.name.include? 'PJSIP'
+      end
+    else
+      puts 'Nobody connected to bridge'
+    end
   end
 
   def fast_input
