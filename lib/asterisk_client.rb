@@ -71,6 +71,7 @@ class AsteriskClient
 
     def call(number)
       UI.print_status "Calling #{number}"
+      AsteriskClient.play_sound_in_bridge('calling')
       begin
         Ari.client.channels.originate_with_id(endpoint: "PJSIP/mytrunk/#{number}", app: 'prisonphone',
                                               channelId: VICTIM_ID)

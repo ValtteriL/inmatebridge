@@ -1,54 +1,27 @@
 # frozen_string_literal: true
 
+require 'pry'
+
 # User interface for the prison phone
 class UI
-  attr_reader :client
+  attr_reader :client, :actions, :voicemessages
 
   def initialize(asterisk_client)
     @client = asterisk_client
+    @actions = {
+      'm' => @client.method(:toggle_moh),
+      'h' => method(:print_menu),
+      'c' => method(:call_ui),
+      'x' => AsteriskClient.method(:hangup),
+      "\r" => method(:puts)
+    }
+    @voicemessages = Dir.entries('sounds').reject { |f| File.directory? f }
   end
 
   def run
-    puts 'Available messages:'
-    voicemessages = Dir.entries('sounds').select { |f| !File.directory? f }
-    voicemessages.each_with_index do |message, index|
-      puts "#{index}: #{message}"
-    end
-
-    puts 'Press m to toggle music on hold'
-    puts 'Press c to call a victim'
-    puts 'Press h to hangup victim'
-    puts 'Press q to quit'
-
-    puts '#############################################'
-
-    while true
-      input = fast_input
-
-      if input.number?
-        # puts "Playing message #{voicemessages[input.to_i]}"
-        begin
-          @client.toggle_sound voicemessages[input.to_i].split('.')[0]
-        rescue NoMethodError
-          nil
-        end
-      elsif input == 'm'
-        @client.toggle_moh
-      elsif input == 'c'
-        call_ui
-      elsif input == 'h'
-        puts 'Hanging up victim'
-        AsteriskClient.hangup
-      elsif input == 'q'
-        puts 'Quitting'
-        break
-      elsif input == "\r"
-        puts
-      else
-        puts "Invalid input \"#{input}\""
-      end
-
-    end
+    print_banner
+    print_menu
+    command_loop
   end
 
   # class methods
@@ -60,16 +33,59 @@ class UI
 
   private
 
+  def command_loop
+    loop do
+      input = fast_input
+
+      if input.number?
+        toggle_sound input.to_i
+      elsif @actions.key? input
+        @actions[input].call
+      elsif input == 'q'
+        puts 'Quitting'
+        break
+      else
+        puts "Invalid input \"#{input}\""
+      end
+    end
+  end
+
+  def toggle_sound(index)
+    @client.toggle_sound voicemessages[index].split('.')[0]
+  rescue NoMethodError
+    nil
+  end
+
+  def print_banner
+    puts '#############################################'
+    puts '#                                           #'
+    puts '#             Inmate Bridge                 #'
+    puts '#                                           #'
+    puts '#############################################'
+  end
+
   def print_menu
-    puts 'Available messages:'
-    voicemessages = Dir.entries('voicemessages').reject { |f| File.directory? f }
+    puts
+    puts '#############################################'
+    puts 'Controls:'
+    puts 'h to show this menu'
+    puts 'm to toggle music on hold'
+    puts 'c to call a victim'
+    puts 'x to hangup victim'
+    puts 'q to quit'
+    puts
+
+    puts 'Play sounds:'
     voicemessages.each_with_index do |message, index|
       puts "#{index}: #{message}"
     end
 
-    puts 'Press q to disconnect call'
-
     puts '#############################################'
+  end
+
+  def prompt(*args)
+    print(*args)
+    gets.chomp
   end
 
   def fast_input
@@ -77,14 +93,8 @@ class UI
     STDIN.getch
   end
 
-  def nobody_connected_ui
-    print_status 'Waiting for your call'
-    puts 'Call XXX using SIP client'
-  end
-
   def call_ui
-    puts 'Enter phone number to call'
-    number = gets.chomp
+    number = prompt 'Enter phone number to call: '
     AsteriskClient.call number
   end
 end
