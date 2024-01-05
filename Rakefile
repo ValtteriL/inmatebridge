@@ -4,7 +4,7 @@ task default: %w[run]
 
 desc 'Run the prison phone'
 task :run do
-  ruby 'prisonphone.rb'
+  ruby 'prisonphone.rb --sipstring sip:inmate:inmatebridge@trunk'
 end
 
 desc 'Run Asterisk in Docker'
