@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-username = 'username'
-password = 'password'
-hostname_and_port = '127.0.0.1:5060'
-trunk_args = "--trunkusername #{username} --trunkpassword #{password} --trunkhostnameandport #{hostname_and_port}"
-
+docker_hub_path = 'docker.io/valtteri/inmatebridge'
+trunk_args = '--trunkusername username --trunkpassword password --trunkhostnameandport 127.0.0.1:5060'
 docker_flags = '--rm -p 127.0.0.1:4569:4569/udp -p 0.0.0.0:10000-10010:10000-10010/udp'
 dev_docker_flags = "#{docker_flags} -p 127.0.0.1:8088:8088/tcp"
 
@@ -40,6 +37,11 @@ namespace :dev do
 
   desc 'Build docker image'
   task :build do
-    sh 'docker build . -t valtteri/inmatebridge'
+    sh "docker build . -t #{docker_hub_path}"
+  end
+
+  desc 'Push image to docker hub'
+  task :build do
+    sh "docker push #{docker_hub_path}"
   end
 end
