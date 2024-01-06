@@ -12,7 +12,7 @@ class ArgParser
     @parser = OptionParser.new
     parser.on("--#{Argument::DEVSERVER}", 'Start Asterisk without InmateBridge')
     parser.on("--#{Argument::DEVCLIENT}", 'Start InmateBridge without Asterisk')
-    parser.on("--#{Argument::TRUNK_USERNAME} [USERNAME]", 'SIP trunk username)')
+    parser.on("--#{Argument::TRUNK_USERNAME} [USERNAME]", 'SIP trunk username')
     parser.on("--#{Argument::TRUNK_PASSWORD} [USERNAME]", 'SIP trunk password')
     parser.on("--#{Argument::TRUNK_HOSTNAME_AND_PORT} [HOSTNAME:PORT]", 'SIP trunk hostname:port')
     parser.on("--#{Argument::USERNAME} [USERNAME]",
