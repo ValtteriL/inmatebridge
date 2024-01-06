@@ -16,7 +16,7 @@ class UI
       "\r" => method(:puts),
       'l' => method(:list_bridge_participants)
     }
-    @voicemessages = Dir.entries('sounds').reject { |f| File.directory? f }.sort
+    @voicemessages = Dir.glob('sounds/**/*').select { |f| File.file? f }.map { |f| File.basename(f) }.sort
   end
 
   def run
@@ -52,6 +52,7 @@ class UI
   end
 
   def toggle_sound(index)
+    puts "invalid sound selection: #{index}" if index >= voicemessages.length
     @client.toggle_sound voicemessages[index].split('.')[0]
   rescue NoMethodError
     nil
