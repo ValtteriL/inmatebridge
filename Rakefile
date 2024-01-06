@@ -25,4 +25,11 @@ namespace :dev do
   task :devserver do
     sh "docker run #{dev_docker_flags} $(docker build -q .) #{trunk_args} --devserver"
   end
+
+  desc 'Run tests'
+  task :test do
+    Dir.glob('test/*').select { |f| File.file? f }.each do |test_file|
+      ruby "#{test_file}"
+    end
+  end
 end

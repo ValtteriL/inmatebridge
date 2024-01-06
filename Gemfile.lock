@@ -20,6 +20,7 @@ GEM
       kramdown (~> 2.0)
     language_server-protocol (3.17.0.3)
     method_source (1.0.0)
+    minitest (5.20.0)
     multi_json (1.15.0)
     nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
@@ -82,6 +83,7 @@ PLATFORMS
 
 DEPENDENCIES
   asterisk-ari-client
+  minitest
   pry
   rake
   rubocop

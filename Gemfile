@@ -6,6 +6,7 @@ gem 'pry'
 gem 'rake'
 
 group :development, :test do
+  gem 'minitest'
   gem 'rubocop', require: false
   gem 'solargraph', require: false
 end

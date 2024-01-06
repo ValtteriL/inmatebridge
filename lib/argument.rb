@@ -7,9 +7,6 @@ module Argument
   PASSWORD = :password
   DEFAULT_PASSWORD = 'inmatebridge'
 
-  CONNSTRING = :connstring
-  DEFAULT_CONNSTRING = nil
-
   TRUNK_USERNAME = :trunkusername
   DEFAULT_TRUNK_USERNAME = nil
 
