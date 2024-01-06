@@ -49,6 +49,12 @@ Example:
 docker run -it --rm -p 127.0.0.1:4569:4569/udp -p 0.0.0.0:10000-10010:10000-10010/udp valtteri/inmatebridge --trunkusername username --trunkpassword password --trunkhostnameandport 192.168.0.1:5060
 ```
 
+To include your own sounds effects in the soundboard, mount them to /usr/share/asterisk/sounds/custom and to /inmatebridge/sounds/custom
+```bash
+docker run .... -v <dir-with-your-sounds>:/usr/share/asterisk/sounds/custom -v <dir-with-your-sounds>:/inmatebridge/sounds/custom
+```
+Note: the sounds should be signed linear 16 bit 8kHz mono in .wav format
+
 ### Usage for development
 
 Start development server:
