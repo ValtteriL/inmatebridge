@@ -16,7 +16,7 @@ class UI
       "\r" => method(:puts),
       'l' => method(:list_bridge_participants)
     }
-    @voicemessages = Dir.entries('sounds').reject { |f| File.directory? f }
+    @voicemessages = Dir.entries('sounds').reject { |f| File.directory? f }.sort
   end
 
   def run
@@ -105,7 +105,7 @@ class UI
   end
 
   def fast_input
-    print 'prisonphone> '
+    print 'inmatebridge> '
     STDIN.getch
   end
 

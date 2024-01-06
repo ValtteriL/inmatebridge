@@ -9,7 +9,7 @@ class AsteriskClient
     Ari.client = Ari::Client.new(
       url: 'http://127.0.0.1:8088/ari',
       api_key: 'asterisk:asterisk',
-      app: 'prisonphone'
+      app: 'inmatebridge'
     )
 
     @@bridge = create_bridge_if_not_exists
@@ -31,8 +31,8 @@ class AsteriskClient
   end
 
   def create_bridge_if_not_exists
-    bridge = Ari.client.bridges.list.select { |b| b.id == 'prisonphone' }.first
-    bridge = Ari.client.bridges.create(type: 'mixing', bridgeId: 'prisonphone') if @bridge.nil?
+    bridge = Ari.client.bridges.list.select { |b| b.id == 'inmatebridge' }.first
+    bridge = Ari.client.bridges.create(type: 'mixing', bridgeId: 'inmatebridge') if @bridge.nil?
     bridge
   end
 
@@ -68,14 +68,14 @@ class AsteriskClient
 
   # class methods
   class << self
-    PLAYBACK_ID = 'prisonphone'
+    PLAYBACK_ID = 'inmatebridge'
     VICTIM_ID = 'victim'
 
     def call(number)
       UI.print_status "Calling #{number}"
       AsteriskClient.play_sound_in_bridge('calling')
       begin
-        Ari.client.channels.originate_with_id(endpoint: "PJSIP/mytrunk/#{number}", app: 'prisonphone',
+        Ari.client.channels.originate_with_id(endpoint: "PJSIP/mytrunk/#{number}", app: 'inmatebridge',
                                               channelId: VICTIM_ID)
       rescue StandardError => e
         UI.print_status "Error calling #{number}: #{e}"
