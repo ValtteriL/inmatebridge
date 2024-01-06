@@ -17,7 +17,7 @@ if options[Argument::DEVCLIENT]
   exit 0
 elsif options[Argument::DEVSERVER]
   UI.print_status 'Starting Asterisk without InmateBridge'
-  io = AsteriskOperator.new(options[Argument::USERNAME],
+  io = AsteriskOperator.new(File, IO, options[Argument::USERNAME],
                             options[Argument::PASSWORD],
                             options[Argument::TRUNK_USERNAME],
                             options[Argument::TRUNK_PASSWORD],
@@ -32,7 +32,7 @@ end
 
 UI.print_status 'Starting InmateBridge'
 
-AsteriskOperator.new(options[Argument::USERNAME],
+AsteriskOperator.new(File, IO, options[Argument::USERNAME],
                      options[Argument::PASSWORD],
                      options[Argument::TRUNK_USERNAME],
                      options[Argument::TRUNK_PASSWORD],
