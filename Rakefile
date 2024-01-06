@@ -1,23 +1,28 @@
 # frozen_string_literal: true
 
-connstring = 'sip:inmate:inmatebridge@trunk'
-docker_flags = '--rm -p 127.0.0.1:8088:8088/tcp -p 127.0.0.1:4569:4569/udp'
+username = 'username'
+password = 'password'
+hostname_and_port = '127.0.0.1:5060'
+trunk_args = "--trunkusername #{username} --trunkpassword #{password} --trunkhostnameandport #{hostname_and_port}"
+
+docker_flags = '--rm -p 127.0.0.1:4569:4569/udp'
+dev_docker_flags = "#{docker_flags} -p 127.0.0.1:8088:8088/tcp"
 
 task default: %w[run]
 
 desc 'Run the prison phone'
 task :run do
-  ruby "inmatebridge.rb --connstring #{connstring} --devclient"
+  sh "docker run -it #{docker_flags} $(docker build -q .) #{trunk_args}"
 end
 
 namespace :dev do
-  desc 'Run InmateBridge without Asterisk'
+  desc 'Run InmateBridge locally without Asterisk'
   task :devclient do
-    ruby "inmatebridge.rb --connstring #{connstring} --devclient"
+    ruby 'inmatebridge.rb --devclient'
   end
 
   desc 'Run Asterisk without InmateBridge'
   task :devserver do
-    sh "docker run #{docker_flags} $(docker build -q .) --devserver"
+    sh "docker run #{dev_docker_flags} $(docker build -q .) #{trunk_args} --devserver"
   end
 end

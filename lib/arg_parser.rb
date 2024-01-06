@@ -12,7 +12,9 @@ class ArgParser
     @parser = OptionParser.new
     parser.on("--#{Argument::DEVSERVER}", 'Start Asterisk without InmateBridge')
     parser.on("--#{Argument::DEVCLIENT}", 'Start InmateBridge without Asterisk')
-    parser.on("--#{Argument::CONNSTRING} STRING", 'Connection string for trunk (REQUIRED)')
+    parser.on("--#{Argument::TRUNK_USERNAME} [USERNAME]", 'SIP trunk username)')
+    parser.on("--#{Argument::TRUNK_PASSWORD} [USERNAME]", 'SIP trunk password')
+    parser.on("--#{Argument::TRUNK_HOSTNAME_AND_PORT} [HOSTNAME:PORT]", 'SIP trunk hostname:port')
     parser.on("--#{Argument::USERNAME} [USERNAME]",
               "IAX2 username for inmates (default:#{Argument::DEFAULT_USERNAME})")
     parser.on("--#{Argument::PASSWORD} [PASSWORD]",
@@ -21,8 +23,12 @@ class ArgParser
 
   def parse(options)
     parser.parse(options, into: collected_options)
-    if collected_options[Argument::CONNSTRING].nil? && !collected_options[Argument::DEVSERVER]
-      puts parser.help
+    if (collected_options[Argument::TRUNK_USERNAME].nil? ||
+      collected_options[Argument::TRUNK_PASSWORD].nil? ||
+      collected_options[Argument::TRUNK_HOSTNAME_AND_PORT].nil?) &&
+       !collected_options[Argument::DEVCLIENT]
+
+      puts 'Missing trunk credentials and host information'
       exit 1
     end
     collected_options

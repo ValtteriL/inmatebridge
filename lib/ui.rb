@@ -87,7 +87,7 @@ class UI
 
   def prompt(*args)
     print(*args)
-    gets.chomp
+    STDIN.gets.chomp
   end
 
   def list_bridge_participants

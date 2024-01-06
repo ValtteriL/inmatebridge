@@ -10,6 +10,15 @@ module Argument
   CONNSTRING = :connstring
   DEFAULT_CONNSTRING = nil
 
+  TRUNK_USERNAME = :trunkusername
+  DEFAULT_TRUNK_USERNAME = nil
+
+  TRUNK_PASSWORD = :trunkpassword
+  DEFAULT_TRUNK_PASSWORD = nil
+
+  TRUNK_HOSTNAME_AND_PORT = :trunkhostnameandport
+  DEFAULT_TRUNK_HOSTNAME_AND_PORT = nil
+
   DEVSERVER = :devserver
   DEFAULT_DEVSERVER = false
 
@@ -20,5 +29,7 @@ module Argument
                         Argument::PASSWORD => Argument::DEFAULT_PASSWORD,
                         Argument::DEVSERVER => Argument::DEFAULT_DEVSERVER,
                         Argument::DEVCLIENT => Argument::DEFAULT_DEVCLIENT,
-                        Argument::CONNSTRING => Argument::DEFAULT_CONNSTRING }.freeze
+                        Argument::TRUNK_USERNAME => Argument::DEFAULT_TRUNK_USERNAME,
+                        Argument::TRUNK_PASSWORD => Argument::DEFAULT_TRUNK_PASSWORD,
+                        Argument::TRUNK_HOSTNAME_AND_PORT => Argument::DEFAULT_TRUNK_HOSTNAME_AND_PORT }.freeze
 end

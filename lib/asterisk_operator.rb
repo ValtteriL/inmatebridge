@@ -2,8 +2,9 @@
 
 # AsteriskOperator patches config with IAX credentials and starts Asterisk
 class AsteriskOperator
-  def initialize(username, password)
-    modify_config username, password
+  def initialize(iax_username, iax_password, sip_username, sip_password, hostname_and_port)
+    modify_iax_conf(iax_username, iax_password)
+    modify_sip_wizard_conf(sip_username, sip_password, hostname_and_port)
   end
 
   def start
@@ -15,10 +16,20 @@ class AsteriskOperator
 
   private
 
-  def modify_config(username, password)
-    text = File.read('/etc/asterisk/iax.conf')
+  def modify_sip_wizard_conf(username, password, hostname_and_port)
+    filepath = '/etc/asterisk/pjsip_wizard.conf'
+    text = File.read(filepath)
     text.sub! 'USERNAME', username
     text.sub! 'PASSWORD', password
-    File.open('/etc/asterisk/iax.conf', 'w') { |file| file << text }
+    text.sub! 'REMOTE_HOST', hostname_and_port
+    File.open(filepath, 'w') { |file| file << text }
+  end
+
+  def modify_iax_conf(username, password)
+    filepath = '/etc/asterisk/iax.conf'
+    text = File.read(filepath)
+    text.sub! 'USERNAME', username
+    text.sub! 'PASSWORD', password
+    File.open(filepath, 'w') { |file| file << text }
   end
 end
