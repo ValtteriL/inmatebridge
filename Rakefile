@@ -2,7 +2,7 @@
 
 docker_hub_path = 'docker.io/valtteri/inmatebridge'
 trunk_args = '--trunkusername username --trunkpassword password --trunkhostnameandport 127.0.0.1:5060'
-docker_flags = '--rm -p 127.0.0.1:4569:4569/udp -p 0.0.0.0:10000-10010:10000-10010/udp'
+docker_flags = '--rm -p 127.0.0.1:4569:4569/udp -p 0.0.0.0:10000-10010:10000-10010/udp -p 0.0.0.0:5060:5060/udp'
 dev_docker_flags = "#{docker_flags} -p 127.0.0.1:8088:8088/tcp"
 
 task default: %w[run]
