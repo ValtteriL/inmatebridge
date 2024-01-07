@@ -4,11 +4,15 @@ InmateBridge is a VoIP voice bridge with a soundboard. It lets you make calls ov
 
 The purpose is prank calling. InmateBridge is inspired by [Phone Losers of America](https://phonelosers.com/) prank call show and includes my favorite sound effects played on it.
 
+Writeup [here](https://shufflingbytes.com/posts/voip-voice-bridge-with-soundboard-for-prank-calling/).
+
 ## Description
 
 The InmateBridge container starts Asterisk PBX in the background and a console application to operate the PBX.
 You call into the Asterisk using IAX2. Your friends may call in as well.
 You then use the CLI to call victims over SIP, play sounds, etc.
+
+![High-level architecture of InmateBridge](/images/inmatebridge-implementation.png)
 
 ### Prerequisites
 
