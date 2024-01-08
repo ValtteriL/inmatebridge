@@ -36,9 +36,10 @@ Usage: inmatebridge [options]
         --devserver                  Start Asterisk without InmateBridge
         --devclient                  Start InmateBridge without Asterisk
         --trunkusername [USERNAME]   SIP trunk username
-        --trunkpassword [USERNAME]   SIP trunk password
+        --trunkpassword [PASSWORD]   SIP trunk password
         --trunkhostnameandport [HOSTNAME:PORT]
                                      SIP trunk hostname:port
+        --callerid [CALLERID]        CallerID number for trunk calls (default: 0123456789)
         --username [USERNAME]        IAX2 username for inmates (default:inmate)
         --password [PASSWORD]        IAX2 password for inmates (default:inmatebridge)
 ```
@@ -50,7 +51,7 @@ docker run -it --rm valtteri/inmatebridge --help
 Example:
 
 ```bash
-docker run -it --rm -p 127.0.0.1:4569:4569/udp -p 0.0.0.0:10000-10010:10000-10010/udp valtteri/inmatebridge --trunkusername username --trunkpassword password --trunkhostnameandport 192.168.0.1:5060
+docker run -it --rm -p 127.0.0.1:4569:4569/udp -p 0.0.0.0:10000-10010:10000-10010/udp -p 0.0.0.0:5060:5060/udp valtteri/inmatebridge --trunkusername username --trunkpassword password --trunkhostnameandport 192.168.0.1:5060
 ```
 
 To include your own sounds effects in the soundboard, mount them to /usr/share/asterisk/sounds/custom and to /inmatebridge/sounds/custom
