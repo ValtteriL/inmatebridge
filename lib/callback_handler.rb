@@ -4,11 +4,13 @@
 class CallbackHandler
   class << self
     def handle_call(e)
-      e.channel.answer
       AsteriskClient.play_sound_in_bridge('confbridge-join')
+      UI.print_status "Prepare: #{e.channel.name} is joining the bridge..."
 
       # dont let victim hear sound
       sleep 1 if e.channel.name.include? 'Local'
+
+      e.channel.answer
 
       bridge = AsteriskClient.class_variable_get(:@@bridge)
       bridge.add_channel(channel: e.channel.id)
