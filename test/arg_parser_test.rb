@@ -17,6 +17,7 @@ class ArgParserTest < Minitest::Test
       {
         Argument::DEVCLIENT => Argument::DEFAULT_DEVCLIENT, Argument::DEVSERVER => Argument::DEFAULT_DEVSERVER,
         Argument::USERNAME => Argument::DEFAULT_USERNAME, Argument::PASSWORD => Argument::DEFAULT_PASSWORD,
+        Argument::CALLERID => Argument::DEFAULT_CALLERID,
         Argument::TRUNK_USERNAME => trunk_username, Argument::TRUNK_PASSWORD => trunk_password,
         Argument::TRUNK_HOSTNAME_AND_PORT => trunk_hostname_and_port
       },
@@ -51,6 +52,7 @@ class ArgParserTest < Minitest::Test
       {
         Argument::DEVCLIENT => true, Argument::DEVSERVER => Argument::DEFAULT_DEVSERVER,
         Argument::USERNAME => username, Argument::PASSWORD => password,
+        Argument::CALLERID => Argument::DEFAULT_CALLERID,
         Argument::TRUNK_USERNAME => Argument::DEFAULT_TRUNK_USERNAME,
         Argument::TRUNK_PASSWORD => Argument::DEFAULT_TRUNK_PASSWORD,
         Argument::TRUNK_HOSTNAME_AND_PORT => Argument::DEFAULT_TRUNK_HOSTNAME_AND_PORT

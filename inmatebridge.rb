@@ -21,7 +21,8 @@ elsif options[Argument::DEVSERVER]
                             options[Argument::PASSWORD],
                             options[Argument::TRUNK_USERNAME],
                             options[Argument::TRUNK_PASSWORD],
-                            options[Argument::TRUNK_HOSTNAME_AND_PORT]).start
+                            options[Argument::TRUNK_HOSTNAME_AND_PORT],
+                            options[Argument::CALLERID]).start
 
   while (line = io.gets)
     puts line
@@ -36,5 +37,6 @@ AsteriskOperator.new(File, IO, options[Argument::USERNAME],
                      options[Argument::PASSWORD],
                      options[Argument::TRUNK_USERNAME],
                      options[Argument::TRUNK_PASSWORD],
-                     options[Argument::TRUNK_HOSTNAME_AND_PORT]).start
+                     options[Argument::TRUNK_HOSTNAME_AND_PORT],
+                     options[Argument::CALLERID]).start
 UI.new(AsteriskClient.new).run

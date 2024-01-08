@@ -9,6 +9,7 @@ class AsteriskOperatorTest < Minitest::Test
     @hostname_and_port = 'hostname_and_port'
     @sip_username = 'sip_username'
     @sip_password = 'sip_password'
+    @callerid = 'callerid'
   end
 
   def test_initialize_and_start
@@ -21,9 +22,11 @@ class AsteriskOperatorTest < Minitest::Test
     mock_file.expect :open, nil, ['/etc/asterisk/iax.conf', 'w']
     mock_file.expect :read, 'asd', ['/etc/asterisk/pjsip_wizard.conf']
     mock_file.expect :open, nil, ['/etc/asterisk/pjsip_wizard.conf', 'w']
+    mock_file.expect :read, 'asd', ['/etc/asterisk/extensions.conf']
+    mock_file.expect :open, nil, ['/etc/asterisk/extensions.conf', 'w']
 
     operator = AsteriskOperator.new(mock_file, mock_io, @username, @password, @sip_username, @sip_password,
-                                    @hostname_and_port)
+                                    @hostname_and_port, @callerid)
 
     result = operator.start
 

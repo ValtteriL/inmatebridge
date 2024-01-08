@@ -13,8 +13,10 @@ class ArgParser
     parser.on("--#{Argument::DEVSERVER}", 'Start Asterisk without InmateBridge')
     parser.on("--#{Argument::DEVCLIENT}", 'Start InmateBridge without Asterisk')
     parser.on("--#{Argument::TRUNK_USERNAME} [USERNAME]", 'SIP trunk username')
-    parser.on("--#{Argument::TRUNK_PASSWORD} [USERNAME]", 'SIP trunk password')
+    parser.on("--#{Argument::TRUNK_PASSWORD} [PASSWORD]", 'SIP trunk password')
     parser.on("--#{Argument::TRUNK_HOSTNAME_AND_PORT} [HOSTNAME:PORT]", 'SIP trunk hostname:port')
+    parser.on("--#{Argument::CALLERID} [CALLERID]",
+              "CallerID number for trunk calls (default: #{Argument::DEFAULT_CALLERID})")
     parser.on("--#{Argument::USERNAME} [USERNAME]",
               "IAX2 username for inmates (default:#{Argument::DEFAULT_USERNAME})")
     parser.on("--#{Argument::PASSWORD} [PASSWORD]",

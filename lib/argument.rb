@@ -7,6 +7,9 @@ module Argument
   PASSWORD = :password
   DEFAULT_PASSWORD = 'inmatebridge'
 
+  CALLERID = :callerid
+  DEFAULT_CALLERID = '0123456789'
+
   TRUNK_USERNAME = :trunkusername
   DEFAULT_TRUNK_USERNAME = nil
 
@@ -26,6 +29,7 @@ module Argument
                         Argument::PASSWORD => Argument::DEFAULT_PASSWORD,
                         Argument::DEVSERVER => Argument::DEFAULT_DEVSERVER,
                         Argument::DEVCLIENT => Argument::DEFAULT_DEVCLIENT,
+                        Argument::CALLERID => Argument::DEFAULT_CALLERID,
                         Argument::TRUNK_USERNAME => Argument::DEFAULT_TRUNK_USERNAME,
                         Argument::TRUNK_PASSWORD => Argument::DEFAULT_TRUNK_PASSWORD,
                         Argument::TRUNK_HOSTNAME_AND_PORT => Argument::DEFAULT_TRUNK_HOSTNAME_AND_PORT }.freeze
