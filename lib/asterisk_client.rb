@@ -75,8 +75,9 @@ class AsteriskClient
     def call(number)
       UI.print_status "Calling #{number}"
       AsteriskClient.play_sound_in_bridge('calling')
+
       begin
-        Ari.client.channels.originate_with_id(endpoint: "PJSIP/trunk/#{number}", app: AsteriskConstants::APP_ID,
+        Ari.client.channels.originate_with_id(endpoint: "PJSIP/#{number}@trunk", app: AsteriskConstants::APP_ID,
                                               channelId: AsteriskConstants::VICTIM_ID)
       rescue StandardError => e
         UI.print_status "Error calling #{number}: #{e}"
