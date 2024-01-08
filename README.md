@@ -21,6 +21,10 @@ To get fun out of InmateBridge, you need the following
 1. An IAX2 (soft)phone (such as [Zoiper](https://www.zoiper.com/))
 2. A SIP trunk
 
+## Demo
+
+[![asciicast](https://asciinema.org/a/630473.svg)](https://asciinema.org/a/630473)
+
 ## Usage
 
 1. Start InmateBridge.
