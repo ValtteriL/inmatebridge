@@ -8,7 +8,7 @@ class CallbackHandler
       AsteriskClient.play_sound_in_bridge('confbridge-join')
 
       # dont let victim hear sound
-      sleep 1 if e.channel.name.include? 'SIP'
+      sleep 1 if e.channel.name.include? 'Local'
 
       bridge = AsteriskClient.class_variable_get(:@@bridge)
       bridge.add_channel(channel: e.channel.id)
