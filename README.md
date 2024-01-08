@@ -78,3 +78,22 @@ Help:
 ```bash
 bundle exec rake -T
 ```
+
+### Debugging
+
+If calls to victims dont succeed, open Asterisk CLI in the container, enable logging, and try calling again
+This may reveal for example requirements with caller ID set by the trunk in use
+
+```bash
+# enter running container
+docker exec -it <container id/name> bash
+
+# once inside, open asterisk CLI
+asterisk -r
+
+# on asterisk CLI, enable pjsip logging
+pjsip set logging on
+pjsip set logging verbose on
+
+# keep the CLI open while you try calling again to see in detail the messaging
+```
