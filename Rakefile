@@ -41,7 +41,7 @@ namespace :dev do
   end
 
   desc 'Push image to docker hub'
-  task :build do
+  task :push do
     sh "docker push #{docker_hub_path}"
   end
 end
